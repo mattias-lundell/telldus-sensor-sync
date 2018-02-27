@@ -1,0 +1,8 @@
+indexes:
+  - kind: sensor_values
+    properties:
+      - name: created_at
+      - name: sensor
+      - name: timestamp
+      - name: type
+      - name: value

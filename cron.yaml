@@ -1,0 +1,4 @@
+cron:
+- description: "daily sync job"
+  url: /sync
+  schedule: every 24 hours

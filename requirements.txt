@@ -1,0 +1,6 @@
+Werkzeug
+Flask
+gunicorn
+requests
+requests_oauthlib
+google-cloud-datastore

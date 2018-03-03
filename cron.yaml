@@ -1,4 +1,4 @@
 cron:
 - description: "daily sync job"
   url: /sync
-  schedule: every 24 hours
+  schedule: every 1 hours

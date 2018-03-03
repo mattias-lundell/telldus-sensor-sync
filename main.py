@@ -63,7 +63,7 @@ def prepare_sensor_value(data_point):
     name = data_point['name']
     typ = {'temp': u'temperature'}.get(name, name)
     value = data_point['value']
-    key = '%s-%d' % (typ, data_point['ts'])
+    key = '%d-%s-%d' % (sensor, typ, data_point['ts'])
 
     return key, {
         'sensor': sensor,

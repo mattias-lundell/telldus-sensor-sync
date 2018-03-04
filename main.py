@@ -10,6 +10,7 @@ from requests_oauthlib import OAuth1Session
 from collections import namedtuple
 
 app = Flask(__name__)
+log = logging.getLogger('werkzeug')
 
 Sensor = namedtuple('Sensor', ['id', 'name', 'max_timestamp'])
 
@@ -36,12 +37,15 @@ def get_sensor(s):
     ds = datastore.Client()
     entity = ds.get(ds.key('sensors', str(sensor_id)))
 
-    return Sensor(sensor_id, sensor_name, entity.get('max_timestamp', 0))
+    sensor = Sensor(sensor_id, sensor_name, entity.get('max_timestamp', 0))
+    log.info("found sensor %s", sensor)
+
+    return sensor
 
 
 def get_sensor_values(telldus, sensor):
     url = 'https://api.telldus.com/json/sensor/history'
-    app.logger.info('fetching sensor values for %d from %d', sensor.id, sensor.max_timestamp)
+    log.info('fetching sensor values for %d from %d', sensor.id, sensor.max_timestamp)
     res = telldus.get(url, params={'id': sensor.id, 'from': sensor.max_timestamp})
 
     if res.status_code != 200:
@@ -146,7 +150,8 @@ def sync():
     for sensor in sensors:
         stored = store_sensor_values(sensor, get_sensor_values(telldus, sensor))
         stored_total += stored
-        app.logger.info('synced %d values for sensor %d', stored, sensor.id)
+        log.info('synced %d values for sensor %d', stored, sensor.id)
+    log.info('synced %d values in total', stored_total)
 
     return 'synced %d sensor values' % stored_total, 200
 
